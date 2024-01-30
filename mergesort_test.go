@@ -7,7 +7,7 @@ import (
 	"modules.cedoromal.com/mergesort"
 )
 
-func TestSort(t *testing.T) {
+func TestSortInt(t *testing.T) {
 	tests := []struct {
 		name     string
 		input    []int
@@ -54,7 +54,7 @@ func TestSort(t *testing.T) {
 	}
 }
 
-func TestSortReversed(t *testing.T) {
+func TestSortReversedInt(t *testing.T) {
 	tests := []struct {
 		name     string
 		input    []int
@@ -148,7 +148,7 @@ func TestSortFloat(t *testing.T) {
 	}
 }
 
-func TestSortFloatReversed(t *testing.T) {
+func TestSortReversedFloat(t *testing.T) {
 	tests := []struct {
 		name     string
 		input    []float64
@@ -183,6 +183,100 @@ func TestSortFloatReversed(t *testing.T) {
 			name:     "random slice with negative",
 			input:    []float64{0.3, -0.1, 0.4, 0.1, 0.5, 0.9, 0.2, 0.6, 0.5, -0.3, 0.5},
 			expected: []float64{0.9, 0.6, 0.5, 0.5, 0.5, 0.4, 0.3, 0.2, 0.1, -0.1, -0.3},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if actual := mergesort.SortReversed(tt.input); !reflect.DeepEqual(actual, tt.expected) {
+				t.Errorf("Expected %v, got %v", tt.expected, actual)
+			}
+		})
+	}
+}
+
+func TestSortString(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    []string
+		expected []string
+	}{
+		{
+			name:     "empty slice",
+			input:    []string{},
+			expected: []string{},
+		},
+		{
+			name:     "single element slice",
+			input:    []string{"a"},
+			expected: []string{"a"},
+		},
+		{
+			name:     "sorted slice",
+			input:    []string{"a", "b", "c"},
+			expected: []string{"a", "b", "c"},
+		},
+		{
+			name:     "reversed slice",
+			input:    []string{"c", "b", "a"},
+			expected: []string{"a", "b", "c"},
+		},
+		{
+			name:     "random slice",
+			input:    []string{"c", "a", "e", "b", "g", "f", "d", "h", "i", "j", "k"},
+			expected: []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"},
+		},
+		{
+			name:     "random slice with duplicates",
+			input:    []string{"c", "a", "e", "b", "a", "g", "f", "d", "h", "i", "j", "k"},
+			expected: []string{"a", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if actual := mergesort.Sort(tt.input); !reflect.DeepEqual(actual, tt.expected) {
+				t.Errorf("Expected %v, got %v", tt.expected, actual)
+			}
+		})
+	}
+}
+
+func TestSortReversedString(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    []string
+		expected []string
+	}{
+		{
+			name:     "empty slice",
+			input:    []string{},
+			expected: []string{},
+		},
+		{
+			name:     "single element slice",
+			input:    []string{"a"},
+			expected: []string{"a"},
+		},
+		{
+			name:     "sorted slice",
+			input:    []string{"a", "b", "c"},
+			expected: []string{"c", "b", "a"},
+		},
+		{
+			name:     "reversed slice",
+			input:    []string{"c", "b", "a"},
+			expected: []string{"c", "b", "a"},
+		},
+		{
+			name:     "random slice",
+			input:    []string{"c", "a", "e", "b", "g", "f", "d", "h", "i", "j", "k"},
+			expected: []string{"k", "j", "i", "h", "g", "f", "e", "d", "c", "b", "a"},
+		},
+		{
+			name:     "random slice with duplicates",
+			input:    []string{"c", "a", "e", "b", "a", "g", "f", "d", "h", "i", "j", "k"},
+			expected: []string{"k", "j", "i", "h", "g", "f", "e", "d", "c", "b", "a", "a"},
 		},
 	}
 

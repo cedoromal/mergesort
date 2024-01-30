@@ -1,20 +1,16 @@
 package mergesort
 
-type Number interface {
-	~int | ~int8 | ~int16 | ~int32 | ~int64 |
-		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr |
-		~float32 | ~float64
+import "cmp"
+
+func Sort[T cmp.Ordered](arr []T) []T {
+	return SortCustom(arr, cmp.Compare)
 }
 
-func Sort[T Number](arr []T) []T {
-	return SortCustom(arr, func(a, b T) T { return a - b })
+func SortReversed[T cmp.Ordered](arr []T) []T {
+	return SortCustom(arr, func(a, b T) int { return -cmp.Compare(a, b) })
 }
 
-func SortReversed[T Number](arr []T) []T {
-	return SortCustom(arr, func(a, b T) T { return b - a })
-}
-
-func SortCustom[T Number](arr []T, comp func(a, b T) T) []T {
+func SortCustom[T cmp.Ordered](arr []T, comp func(a, b T) int) []T {
 	if len(arr) <= 1 {
 		return arr
 	}
@@ -25,7 +21,7 @@ func SortCustom[T Number](arr []T, comp func(a, b T) T) []T {
 	return merge(arr1, arr2, comp)
 }
 
-func merge[T Number](arr1 []T, arr2 []T, comp func(a, b T) T) []T {
+func merge[T cmp.Ordered](arr1 []T, arr2 []T, comp func(a, b T) int) []T {
 	result := make([]T, len(arr1)+len(arr2))
 
 	i := 0
